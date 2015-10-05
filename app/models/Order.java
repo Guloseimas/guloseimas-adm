@@ -380,11 +380,14 @@ public class Order {
 
         private int quantity;
 
-        private String size;
         private String type;
-        private String color;
 
-        private String genderSlug;
+
+        private String recheio;
+
+        private List<Estrutura> estruturas;
+
+        // private String genderSlug;
 
         private boolean orderOutOfStock;
 
@@ -396,10 +399,12 @@ public class Order {
 
 
         public String toString(){
-            return "sku "+this.sku+" quantity "+this.quantity+" size "+this.size+" genderSlug "
-                    +this.genderSlug+" priceWithQuantityFormatted "+this.priceWithQuantityFormatted
-                    +" Price "+this.product.getPriceFormatted()+" color "+this.getColor()+" model "+this.getType()
-                    +" title "+this.product.getTitle()+" description "+this.product.getDescription();
+        return "sku "+this.sku+" quantity "+this.quantity+" recheio "+this.recheio
+                +" estrutura "+this.estruturas.toString()+" type "+this.type
+                +" priceWithQuantityFormatted "+this.priceWithQuantityFormatted
+                +" Price "+this.product.getPriceFormatted()
+                +" title "+this.product.getTitle()+" description "
+                +this.product.getDescription();
         }
 
         public double getPriceWithQuantity() {
@@ -426,10 +431,9 @@ public class Order {
             this.sku = inventory.getSku();
             this.product = inventory.getProduct();
             this.quantity = inventory.getQuantity();
-            this.size = inventory.getSize();
             this.type = inventory.getType();
-            this.color = inventory.getColor();
-            this.genderSlug = inventory.getGenderSlug();
+            this.estruturas = inventory.getEstruturas();
+            this.recheio = inventory.getRecheio();
             this.orderOutOfStock = inventory.isOrderOutOfStock();
             this.sellInOutOfStock = inventory.isSellInOutOfStock();
         }
@@ -449,13 +453,22 @@ public class Order {
             this.type = type;
         }
 
-        public String getColor() {
-            return color;
+         public List<Estrutura> getEstruturas() {
+            return estruturas;
         }
 
-        public void setColor(String color) {
-            this.color = color;
+        public void setEstruturas(List<Estrutura> estruturas) {
+            this.estruturas = estruturas;
         }
+
+        public String getRecheio() {
+            return recheio;
+        }
+
+        public void setRecheio(String recheio) {
+            this.recheio = recheio;
+        }
+        
         public String getSku() {
             return sku;
         }
@@ -465,13 +478,6 @@ public class Order {
         }
 
 
-        public String getGenderSlug() {
-            return genderSlug;
-        }
-
-        public void setGenderSlug(String genderSlug) {
-            this.genderSlug = genderSlug;
-        }
 
         public boolean isOrderOutOfStock() {
             return orderOutOfStock;
@@ -481,13 +487,7 @@ public class Order {
             this.orderOutOfStock = orderOutOfStock;
         }
 
-        public String getSize() {
-            return size;
-        }
-
-        public void setSize(String size) {
-            this.size = size;
-        }
+       
 
         public int getQuantity() {
             return quantity;

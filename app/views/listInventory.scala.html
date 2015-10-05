@@ -35,10 +35,9 @@
                       <tr>
                         <th>SKU</th>
                         <th>Product Slug</th>
-                        <th>Product Size</th>
-                        <th>Product Gender</th>
-                        <th>Product Color</th>
-                        <th>Product Modelo</th>
+                        <th>Product Recheio</th>
+                        <th>Product Estrutura</th>
+                        <th>Product Type</th>
                         <th>Quantity</th>
                         <th>Product Price</th>
                         <th>Action</th>
@@ -50,18 +49,12 @@
                         <td id="@inventory.getSku">@inventory.getSku</td>
                         <td>@inventory.getProduct.getSlug</td>
                         <td> 
-                            <span class="label label-success" style="font-size: 100%; font-weight: 200;">@inventory.getSize</span>
+                            <span class="label label-success" style="font-size: 100%; font-weight: 200;">@inventory.getRecheio</span>
                         </td>
                         <td> 
-                            <span class="label label-warning" style="font-size: 100%; font-weight: 200;">@inventory.getGenderSlug</span>
+                            <span class="label label-warning" style="font-size: 100%; font-weight: 200;">@inventory.getEstruturas.toString()</span>
                         </td>
-                        <td> 
-                            <span @if(inventory.getColor!=null){
-                                style="background-color:@inventory.getColor; font-size: 100%; font-weight: 200;"
-                                }
-                              class="label label-warning" > Cor</span>
-                        </td>
-                        <td> 
+                        <td>
                             <span class="label label-success" style="font-size: 100%; font-weight: 200;">@inventory.getType</span>
                         </td>
                         <td>

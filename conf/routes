@@ -20,9 +20,15 @@ GET     /getUsuariosGender                           controllers.Dashboard.getUs
 GET     /getFaturamento                           controllers.Dashboard.getFaturamento()
 GET     /getUsuariosGrowTotal                           controllers.Dashboard.getUsuariosGrowTotal()
 
+
+
 GET            /signin                           controllers.Application.login()
 POST           /signin                           controllers.Authentication.authenticate()
 GET            /logout                       controllers.Application.logout()
+
+GET     /encomendaprops                           controllers.EncomendaController.index()
+POST     /saveencomendaprops                           controllers.EncomendaController.saveEncomenda()
+
 
 GET            /updatecompra                     controllers.OrderController.updatecompra()
 POST           /updatecompra                     controllers.OrderController.updatecompra()

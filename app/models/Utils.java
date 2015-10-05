@@ -51,7 +51,7 @@ public class Utils {
             List<String> tags = new ArrayList<>();
 
             for (Utils.ProductRecheioType tag : Utils.ProductRecheioType.values()) {
-                tags.add(tag.name());
+                tags.add(tag.name);
             }
             return tags;
         }
@@ -81,14 +81,14 @@ public class Utils {
         flores("Flores");
 
         String name;
-        private ProductType(String name){
+        private ProductStruct(String name){
             this.name = name;
         }
 
         public static List<String> getList() {
             List<String> tags = new ArrayList<>();
 
-            for (Utils.ProductType tag : Utils.ProductType.values()) {
+            for (Utils.ProductStruct tag : Utils.ProductStruct.values()) {
                 tags.add(tag.name);
             }
             return tags;

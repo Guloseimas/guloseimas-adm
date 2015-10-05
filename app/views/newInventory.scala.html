@@ -64,7 +64,7 @@
 
                        <div class="form-group">
                           <label >Recheio  @if(inventory!=null){NO CHANGE}</label>
-                          <select  name="gender" data-placeholder="Chose the Gender" style="width: 350px; display: none;"  class="chosen-select-width" tabindex="-1">
+                          <select  name="recheio" data-placeholder="Chose the Gender" style="width: 350px; display: none;"  class="chosen-select-width" tabindex="-1">
                              @if(inventory!=null&&inventory.getRecheio!=null){
                                 @for(recheioType<- Utils.ProductRecheioType.getList){
                                   @if(recheioType.equals(inventory.getRecheio)){
@@ -97,25 +97,54 @@
                               
                           </select>
                       </div>
+                     <div id ="estruturasContainer" class="box-body">
                       <div class="form-group">
                           <label >Estruturas </label>
-                          <select name="productType" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="chosen-select-width" tabindex="-1">
-                            <option value=""></option>
-                            @for(struct<- Utils.ProductStruct.getList){
-                              <option value="@struct">@struct</option>
-                            }
-                          </select>
-                          <div id="colorPicker"></div>
-                          <div class="input-group">
-                          <span @if(inventory.getColor!=null){
-                                style="background-color:@inventory.getColor;"
+                            @if(inventory!=null&&inventory.getEstruturas.size()>0){
+
+                              @for(index <- 0 until inventory.getEstruturas().size){
+                            
+                              <select name="productEstrutura" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                                  <option value="@inventory.getEstruturas().get(index).getEstrutura">@inventory.getEstruturas().get(index).getEstrutura</option>
+                              </select>
+                              <div id="colorPicker@index"></div>
+                              <div class="input-group">           
+                                <span @if(inventory.getEstruturas().get(index).getColor!=null){
+                                style="background-color:@inventory.getEstruturas().get(index).getColor;"
+                                } id="color@index" class="input-group-addon"></span>
+                                <input disabled="" type="text" id="colorRGB@index"  value="@inventory.getEstruturas().get(index).getColor"  class="form-control"/>
+                                <input  type="hidden" name="color" id="colorRGBValue@index"  value="@inventory.getEstruturas().get(index).getColor"  class="form-control"/>
+                              </div>
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $('#colorPicker@index').empty().addColorPicker({
+                                            clickCallback: function(c) {
+                                              $('#color@index').css('background-color',c);
+                                              $('#colorRGB@index').val(c);
+                                              $('#colorRGBValue@index').val(c);
+                                            }
+                                          });
+                                    });
+                                </script>
+                              }
+                            }else{
+                                <select name="productEstrutura" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                              @for(struct<- Utils.ProductStruct.getList){
+                                      <option value="@struct">@struct</option>
                                 }
-                              id="color" class="input-group-addon"></span>
-                          <input disabled="" type="text" id="colorRGB"  value="@inventory.getColor"  class="form-control"/>
-                          <input  type="hidden" name="color" id="colorRGBValue"  value="@inventory.getColor"  class="form-control"/>
+                                  </select>
+                                <div id="colorPicker"></div>
+                                <div class="input-group">           
+                                  <span id="color" class="input-group-addon"></span>
+                                  <input disabled="" type="text" id="colorRGB"  value=""  class="form-control"/>
+                                  <input  type="hidden" name="color" id="colorRGBValue"  value=""  class="form-control"/>
+                                </div>
+                          }
                           </div>
                       </div>
-
+                      @if(inventory!=null&&inventory.getEstruturas.size()<=0){
+                       <button id="addButton" type="button" onClick="addEstrutura();" class="btn btn-secondary">Add Nova estrutura</button>
+                      }
                       <div class="form-group">
                           <label for="quantity">Quantity</label><br/>
                           <input type="text" class="" id="quantity" name="quantity" value="@inventory.getQuantity" placeholder="Quantity">
@@ -167,15 +196,66 @@
                 }
               });
             $("#li-inventory" ).addClass("active");
-        });
 
-        $(function() {
+
             $(".price").maskMoney({prefix:' ', thousands:'.', decimal:',', affixesStay: true});
             $('#quantity').maskMoney({prefix:' ', thousands:'.', decimal:',',precision:0, affixesStay: true});
 
             var spinner = $( "#quantity" ).spinner();
 
         });
+      var estruturaJS = {};
+      @if(inventory!=null&&inventory.getEstruturas!=null){
+            var count = @inventory.getEstruturas.size()
+        }else{
+            var count = 0;
+        }
+      function addEstrutura(){
+        count =count+1;
+        
 
+
+        @for(struct<- Utils.ProductStruct.getList){
+          estruturaJS['@struct']="<option  value='@struct'  >@struct</option>";
+        }
+
+        var productContainer = "<div class='form-group'>\
+                            <label >Estruturas </label>\
+                            <select name='productEstrutura' data-placeholder='Chose the estrutura' style='width: 350px; display: none;'   class='estrutura chosen-select-width' tabindex='-1'>\
+                                <option value=''></option>";
+              
+        Object.keys(estruturaJS).forEach(function(key){
+            console.log(key)
+            productContainer+= estruturaJS[key];
+        }); 
+                                  
+
+        productContainer += "</select>\
+                            <div id='colorPicker"+count+"'></div>\
+                            <div class='input-group'>\
+                              <span id='color"+count+"' class='input-group-addon'></span>\
+                              <input disabled='' type='text' id='colorRGB"+count+"'  value=''  class='form-control'/>\
+                              <input  type='hidden' name='color' id='colorRGBValue"+count+"'  value=''  class='form-control'/>\
+                            </div>";
+
+          $('.estrutura option').attr('disabled',true); 
+          $('.estrutura option:selected').attr('disabled',false);
+          $('.estrutura').prop('disabled', false).trigger("chosen:updated");
+
+          $("#estruturasContainer").append(productContainer);
+
+          for (var selector in config) {
+            $(selector).chosen(config[selector]);
+          }
+          $('#colorPicker'+count).empty().addColorPicker({
+                clickCallback: function(c) {
+                  $('#color'+count).css('background-color',c);
+                  $('#colorRGB'+count).val(c);
+                  $('#colorRGBValue'+count).val(c);
+                }
+              });
+          $('.estrutura').chosen().change(updatePrice);
+
+      }
 </script>
 }

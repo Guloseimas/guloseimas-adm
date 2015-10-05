@@ -435,11 +435,6 @@ ul.sidebar li a h1,ul.sidebar li a h2,ul.sidebar li a h3,ul.sidebar li a h4,ul.s
             <tr>
               <td class="small" width="20%" style="vertical-align: top; padding-right:10px;"><img src="@inventory.getProduct.getImages.get(0).getUrl" /></td>
               <td>
-                <h4>@inventory.getProduct.getTitle <small>@inventory.getType - @inventory.getSize - @inventory.getGenderSlug</small></h4>
-                @if(inventory.getColor!=null){
-                   <span  style="background-color:@inventory.getColor; font-size: 100%; font-weight: 200;" > 
-                          Cor</span>
-              	}
                 <p class="">
                   @inventory.getQuantity X @inventory.getProduct.getPriceFormatted . <br />
                                   Total:  @inventory.getPriceWithQuantityFormatted 

@@ -601,6 +601,14 @@ public class MongoService {
         List<SiteContent> contents = DS.mop.findAll(SiteContent.class);
         return contents;
     }
+    public static boolean saveEncomendaProperties(EncomendaProperties content){
+        DS.mop.save(content);
+        return true;
+    }
+    public static EncomendaProperties getEncomendaProperties(){
+        EncomendaProperties encomendaProp = DS.mop.findOne(new Query(),EncomendaProperties.class);
+        return encomendaProp;
+    }
     public static SiteContent findContentById(String id) {
         return DS.mop.findById(id,SiteContent.class);
     }

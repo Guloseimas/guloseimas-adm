@@ -93,12 +93,14 @@ public class InventoryController extends Controller {
 
         String productId = (dataFiles.get("product") != null && dataFiles.get("product").length > 0) ? dataFiles.get("product")[0] : null;
         String outOfStock = (dataFiles.get("outOfStock") != null && dataFiles.get("outOfStock").length > 0) ? dataFiles.get("outOfStock")[0] : null;
-        String productSize = (dataFiles.get("productSize") != null && dataFiles.get("productSize").length > 0) ? dataFiles.get("productSize")[0] : null;
         String quantity = (dataFiles.get("quantity") != null && dataFiles.get("quantity").length > 0) ? dataFiles.get("quantity")[0] : null;
         String sellInOutOfStock = (dataFiles.get("sellInOutOfStock") != null && dataFiles.get("sellInOutOfStock").length > 0) ? dataFiles.get("sellInOutOfStock")[0] : null;
-        String gender = (dataFiles.get("gender") != null && dataFiles.get("gender").length > 0) ? dataFiles.get("gender")[0] : null;
+        String recheio = (dataFiles.get("recheio") != null && dataFiles.get("recheio").length > 0) ? dataFiles.get("recheio")[0] : null;
         String productType = (dataFiles.get("productType") != null && dataFiles.get("productType").length > 0) ? dataFiles.get("productType")[0] : null;
-        String color = (dataFiles.get("color") != null && dataFiles.get("color").length > 0) ? dataFiles.get("color")[0] : null;
+        String[] color = (dataFiles.get("color") != null && dataFiles.get("color").length > 0) ? dataFiles.get("color") : null;
+        String[] productEstrutura = (dataFiles.get("productEstrutura") != null && dataFiles.get("productEstrutura").length > 0) ? dataFiles.get("productEstrutura") : null;
+        List<String> colorsList =  (color!=null)?Arrays.asList(color):new ArrayList<>();
+        List<String> productEstruturaList =  (productEstrutura!=null)?Arrays.asList(productEstrutura):new ArrayList<>();
 
         boolean outOfStockBool = (outOfStock!=null)?true:false;
         boolean sellInOutOfStockBool = (sellInOutOfStock!=null)?true:false;
@@ -122,22 +124,9 @@ public class InventoryController extends Controller {
             flash("inventory","Product does not Exist");
             return redirect(routes.InventoryController.inventory(id));
         }
-        //gender!=null&&!MongoService.hasCollectionByGender(gender)||
-        if(gender==null||gender.equals("")){
-            flash("inventory","Gender dont exists or Gender empty ");
-            return redirect(routes.InventoryController.inventory(id));
-        }
+        
         if(productType==null||productType.equals("")){
             flash("inventory","Coloque um modelo ou tipo");
-            return redirect(routes.InventoryController.inventory(id));
-        }
-        if(productSize==null||productSize.equals("")||productSize!=null&&!Utils.ProductSizeType.getList().contains(productSize)){
-            flash("inventory","Product Size dont exists or Product Size empty ");
-            return redirect(routes.InventoryController.inventory(id));
-        }
-
-        if(id==null&&MongoService.hasInventoryByProductIdSizeAndGenderAndType(productId,productSize,gender,productType)){
-            flash("inventory","Inventory Already exists please update");
             return redirect(routes.InventoryController.inventory(id));
         }
 
@@ -154,16 +143,26 @@ public class InventoryController extends Controller {
             inventory.setSku("sku"+(MongoService.countAllInventories()+1));
         } 
 
+        if(productEstrutura.length>0){
+            for(int i=0;i<productEstrutura.length;i++){
+                if(!color[i].equals("")){
+                    Estrutura estrutura = new Estrutura();
+                    estrutura.setEstrutura(productEstrutura[i]);
+                    estrutura.setColor(color[i]);
+                    inventory.getEstruturas().add(estrutura);
+                }
+                
+            }
+        }
+
         inventory.setOrderOutOfStock(outOfStockBool);
         inventory.setProduct(product);
         int oldQuantity = inventory.getQuantity();
         inventory.setQuantity(quantityInt);
-        inventory.setSize(productSize);
         inventory.setSellInOutOfStock(sellInOutOfStockBool);
-        inventory.setGenderSlug(gender);
         inventory.setType(productType);
-        inventory.setColor(color);
 
+        
         //save Inventory
         MongoService.saveInventory(inventory);
         // Save Inventory Entry

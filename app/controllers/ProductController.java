@@ -207,11 +207,7 @@ public class ProductController extends Controller {
         inventory.setOrderOutOfStock(outOfStockBool);
         int oldQuantity = inventory.getQuantity();
         inventory.setQuantity(quantityInt);
-        inventory.setSize(productSize);
         inventory.setSellInOutOfStock(sellInOutOfStockBool);
-        inventory.setGenderSlug(gender);
-        inventory.setType(productType);
-        inventory.setColor(color);
 
         //save Inventory
         MongoService.saveInventory(inventory);

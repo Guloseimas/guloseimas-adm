@@ -60,6 +60,7 @@ public class Inventory {
                 +" title "+this.product.getTitle()+" description "
                 +this.product.getDescription();
     }
+    
     public String getName(){
         return ""+this.sku +"-"+this.product.getSlug()+"-"+this.recheio+ "-"+this.type+"-"
                 ;
@@ -190,26 +191,6 @@ public class Inventory {
 
         return formatter.format(price);
     }
-    @Document
-    public class Estrutura {
-        private String estrutura;
-        private String color;
-
-        public String getEstrutura() {
-            return estrutura;
-        }
-
-        public void setEstrutura(String estrutura) {
-            this.estrutura = estrutura;
-        }
-
-        public String getColor() {
-            return color;
-        }
-
-        public void setColor(String color) {
-            this.color = color;
-        }
-
-    }
+    
+    
 }

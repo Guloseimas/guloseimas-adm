@@ -32,12 +32,11 @@ public class Global extends GlobalSettings {
         MongoService.createInitialContent();
 
         createUser();
-        createProducts();
         Logger.info("Application has started");
     }
     public static void createUser(){
         String password = System.getenv("ADMIN_PASSWORD")!=null?System.getenv("ADMIN_PASSWORD"):"admin";
-        User user = new User("Admin", "administrador@musicamise.com.br", password);
+        User user = new User("Admin", "administrador@guloseimas.com.br", password);
         user.setManager(true);
         MongoService.saveUser(user);
     }
@@ -49,7 +48,7 @@ public class Global extends GlobalSettings {
             saveInventory(i); 
         }*/
     }
-    public static void saveProduct(int id){
+  /*  public static void saveProduct(int id){
 
         String title = "title"+id;
         String description = "description"+id;
@@ -162,7 +161,7 @@ public class Global extends GlobalSettings {
         product.getInventories().add(inventory);
         MongoService.saveProduct(product);
 
-    }
+    }*/
 
     public void onStop(Application app) {
         Logger.info("Application shutdown...");
