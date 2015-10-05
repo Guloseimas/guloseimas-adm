@@ -1,0 +1,228 @@
+@(encomendaprop:models.EncomendaProperties,group:Map[String,List[models.Estrutura]])
+@import helper._
+@index{
+<!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Encomenda List
+        <small>Control panel</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li class="active">Encomenda ajustes</li>
+    </ol>
+</section>
+ <!-- Main content -->
+        <section class="content">
+          <!-- Small boxes (Stat box) -->
+            <div class="row">
+            <!-- left column -->
+            <div class="col-md-6">
+              <!-- general form elements -->
+              <div class="box box-primary">
+                <div class="box-header">
+                  <h3 class="box-title">Encomenda Overview</h3>
+                    <br/><p class="text-red">@flash.get("encomenda")</p>
+
+                </div><!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" method="POST" 
+                  action="@routes.EncomendaController.saveEncomenda()">
+                  @CSRF.formField
+
+                  <div class="box-body">
+
+                      <label >Visibilidade</label>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="available" @if(encomendaprop.isAvailableEncomenda){checked=""}  > Permitir Encomendas
+                        </label>
+                      </div>
+
+                       <div class="form-group">
+                          <label >Recheio </label>
+                          <select  name="recheio" data-placeholder="Chose the Gender" style="width: 350px; display: none;" multiple="" class="chosen-select-width" tabindex="-1">
+                                <option value=""></option>
+                                @for(recheioType<- Utils.ProductRecheioType.getList){
+                                  <option @if(encomendaprop.getRecheios.contains(recheioType)) {selected=""} value="@recheioType">@recheioType</option>
+                                }
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label >Tipo de flor </label>
+                          <select name="productType" data-placeholder="Chose the tages" style="width: 350px; display: none;" multiple="" class="chosen-select-width" tabindex="-1">
+                                <option value=""></option>
+                                @for(productType<- Utils.ProductType.getList){
+                                  <option @if(encomendaprop.getTipoDeFlor.contains(productType)){selected=""} value="@productType">@productType</option>
+                                }
+                          </select>
+                      </div>
+                     <div id ="estruturasContainer" class="box-body">
+                      <div class="form-group">
+                          <label >Estruturas </label>
+                            @if(encomendaprop!=null&&encomendaprop.getEstruturasList.size()>0){
+                              <br/>
+
+                              @for((name,obj) <- group){
+                              <br/>
+                                <label>@name</label>
+                              <div class="input-group">           
+
+                                @for(estrutura<-obj){
+                                    <span @if(estrutura.getColor!=null){ style="background-color:@estrutura.getColor;" } id="color" class="input-group-addon"></span>
+                                }
+                                </div>
+                              }
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+                              <br/>
+
+
+                              @for(index <- 0 until encomendaprop.getEstruturasList().size){
+                              <div id="estrutura-@index">
+                              <select name="productEstrutura" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                                  <option value="@encomendaprop.getEstruturasList().get(index).getEstrutura">@encomendaprop.getEstruturasList().get(index).getEstrutura</option>
+                              </select>
+                              <div id="colorPicker@index"></div>
+                              <div class="input-group">           
+                                <span @if(encomendaprop.getEstruturasList().get(index).getColor!=null){
+                                style="background-color:@encomendaprop.getEstruturasList().get(index).getColor;"
+                                } id="color@index" class="input-group-addon"></span>
+                                <input disabled="" type="text" id="colorRGB@index"  value="@encomendaprop.getEstruturasList().get(index).getColor"  class="form-control"/>
+                                <input  type="hidden" name="color" id="colorRGBValue@index"  value="@encomendaprop.getEstruturasList().get(index).getColor"  class="form-control"/>
+                              </div>
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $('#colorPicker@index').empty().addColorPicker({
+                                            clickCallback: function(c) {
+                                              $('#color@index').css('background-color',c);
+                                              $('#colorRGB@index').val(c);
+                                              $('#colorRGBValue@index').val(c);
+                                            }
+                                          });
+                                    });
+                                </script>
+                                   <button id="addButton" type="button" onClick="deleteEstrutura(@index);" class="btn btn-secondary">remover</button>
+                              </div>
+
+                              }
+                            }else{
+                                <select name="productEstrutura" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                              @for(struct<- Utils.ProductStruct.getList){
+                                      <option value="@struct">@struct</option>
+                                }
+                                  </select>
+                                <div id="colorPicker"></div>
+                                <div class="input-group">           
+                                  <span id="color" class="input-group-addon"></span>
+                                  <input disabled="" type="text" id="colorRGB"  value=""  class="form-control"/>
+                                  <input  type="hidden" name="color" id="colorRGBValue"  value=""  class="form-control"/>
+                                </div>
+                          }
+                          </div>
+                      </div>
+                       <button id="addButton" type="button" onClick="addEstrutura();" class="btn btn-secondary">Add Nova estrutura</button>
+                  </div><!-- /.box-body -->
+
+                  <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                  </div>
+                </form>
+              </div><!-- /.box -->
+
+              <!-- Form Element sizes -->
+            </div><!--/.col (left) -->
+              <!-- right column -->
+          </div>   <!-- /.row -->
+        </section><!-- /.content -->
+       
+
+<!-- jQuery 2.1.4 -->
+<script src="@routes.Assets.at("plugins/jQuery/jQuery-2.1.4.min.js")"></script>
+<style type="text/css">
+  
+  .ColorBlotch {
+    border: 1px solid #000000;
+    padding: 0 2px 0 2px;
+    font-family: monospace;
+    cursor: pointer;
+    font-size: 1.2em;
+  }
+
+</style>
+<script type="text/javascript">
+     $(document).ready(function() {
+             $("li" ).removeClass("active")
+             $(".treeview" ).addClass("active");
+
+            $("#li-encomenda" ).addClass("active");
+            $('#colorPicker').empty().addColorPicker({
+                clickCallback: function(c) {
+                  $('#color').css('background-color',c);
+                  $('#colorRGB').val(c);
+                  $('#colorRGBValue').val(c);
+
+                  
+                }
+              });
+        });
+        var estruturaJS = {};
+        @if(encomendaprop!=null&&encomendaprop.getEstruturas!=null){
+            var count = @encomendaprop.getEstruturas.size()
+        }else{
+            var count = 0;
+        }
+      function deleteEstrutura(index){
+        $("#estrutura-"+index).remove();
+      };
+
+      function addEstrutura(){
+        count =count+1;
+
+
+        
+        @for(struct<- Utils.ProductStruct.getList){
+          estruturaJS['@struct']="<option  value='@struct'  >@struct</option>";
+        }
+        var productContainer = "<div class='form-group'>\
+                            <label >Estruturas </label>\
+                            <select name='productEstrutura' data-placeholder='Chose the estrutura' style='width: 350px; display: none;'   class='estrutura chosen-select-width' tabindex='-1'>\
+                                <option value=''></option>";
+              
+        Object.keys(estruturaJS).forEach(function(key){
+            console.log(key)
+            productContainer+= estruturaJS[key];
+        }); 
+                                  
+
+        productContainer += "</select>\
+                            <div id='colorPicker"+count+"'></div>\
+                            <div class='input-group'>\
+                              <span id='color"+count+"' class='input-group-addon'></span>\
+                              <input disabled='' type='text' id='colorRGB"+count+"'  value=''  class='form-control'/>\
+                              <input  type='hidden' name='color' id='colorRGBValue"+count+"'  value=''  class='form-control'/>\
+                            </div>";
+
+          $('.estrutura option').attr('disabled',true); 
+          $('.estrutura option:selected').attr('disabled',false);
+          $('.estrutura').prop('disabled', false).trigger("chosen:updated");
+
+          $("#estruturasContainer").append(productContainer);
+
+          for (var selector in config) {
+            $(selector).chosen(config[selector]);
+          }
+          $('#colorPicker'+count).empty().addColorPicker({
+                clickCallback: function(c) {
+                  $('#color'+count).css('background-color',c);
+                  $('#colorRGB'+count).val(c);
+                  $('#colorRGBValue'+count).val(c);
+                }
+              });
+          $('.estrutura').chosen().change(updatePrice);
+
+      }
+</script>
+    }
