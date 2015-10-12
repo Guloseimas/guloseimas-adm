@@ -93,6 +93,7 @@ public class InventoryController extends Controller {
 
         String productId = (dataFiles.get("product") != null && dataFiles.get("product").length > 0) ? dataFiles.get("product")[0] : null;
         String outOfStock = (dataFiles.get("outOfStock") != null && dataFiles.get("outOfStock").length > 0) ? dataFiles.get("outOfStock")[0] : null;
+        String temDoce = (dataFiles.get("temDoce") != null && dataFiles.get("temDoce").length > 0) ? dataFiles.get("temDoce")[0] : null;
         String quantity = (dataFiles.get("quantity") != null && dataFiles.get("quantity").length > 0) ? dataFiles.get("quantity")[0] : null;
         String sellInOutOfStock = (dataFiles.get("sellInOutOfStock") != null && dataFiles.get("sellInOutOfStock").length > 0) ? dataFiles.get("sellInOutOfStock")[0] : null;
         String recheio = (dataFiles.get("recheio") != null && dataFiles.get("recheio").length > 0) ? dataFiles.get("recheio")[0] : null;
@@ -104,6 +105,7 @@ public class InventoryController extends Controller {
 
         boolean outOfStockBool = (outOfStock!=null)?true:false;
         boolean sellInOutOfStockBool = (sellInOutOfStock!=null)?true:false;
+        boolean temDoceBool = (temDoce!=null)?true:false;
 
 
         int quantityInt = Integer.parseInt(quantity.trim().replace(".",""));
@@ -161,6 +163,7 @@ public class InventoryController extends Controller {
         inventory.setQuantity(quantityInt);
         inventory.setSellInOutOfStock(sellInOutOfStockBool);
         inventory.setType(productType);
+        inventory.setTemDoce(temDoceBool);
 
         
         //save Inventory

@@ -43,6 +43,7 @@ public class Inventory {
     private List<Estrutura> estruturas;
 
     // private String genderSlug;
+    private boolean temDoce;
 
     private boolean orderOutOfStock;
 
@@ -81,6 +82,14 @@ public class Inventory {
         this.estruturas = estruturas;
     }
 
+    public boolean isTemDoce() {
+        return temDoce;
+    }
+
+    public void setTemDoce(boolean temDoce) {
+        this.temDoce = temDoce;
+    }
+
     public double getPriceWithQuantity() {
         return priceWithQuantity;
     }
@@ -102,6 +111,7 @@ public class Inventory {
     public Inventory(){
         this.product = new Product();
         this.estruturas = new ArrayList<>();
+        this.temDoce = true;
     }
 
     public Inventory(Inventory inventory){

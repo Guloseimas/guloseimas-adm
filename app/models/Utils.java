@@ -39,9 +39,9 @@ public class Utils {
 
     public enum ProductRecheioType {
         goiaba("Goiaba"), 
-        noses("Noses"),
-        romeo_e_julieta("Romeo e Julieta"),
-        nutella("nutella");
+        nozes("Nozes"),
+        romeu_e_julieta("Romeu e Julieta"),
+        nutella("Nutella");
 
         String name;
         private ProductRecheioType(String name){
@@ -51,7 +51,7 @@ public class Utils {
             List<String> tags = new ArrayList<>();
 
             for (Utils.ProductRecheioType tag : Utils.ProductRecheioType.values()) {
-                tags.add(tag.name);
+                tags.add(tag.name());
             }
             return tags;
         }
@@ -71,7 +71,7 @@ public class Utils {
             List<String> tags = new ArrayList<>();
 
             for (Utils.ProductType tag : Utils.ProductType.values()) {
-                tags.add(tag.name);
+                tags.add(tag.name());
             }
             return tags;
         }
@@ -89,7 +89,7 @@ public class Utils {
             List<String> tags = new ArrayList<>();
 
             for (Utils.ProductStruct tag : Utils.ProductStruct.values()) {
-                tags.add(tag.name);
+                tags.add(tag.name());
             }
             return tags;
         }

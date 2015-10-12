@@ -93,17 +93,7 @@
                                 <input disabled="" type="text" id="colorRGB@index"  value="@encomendaprop.getEstruturasList().get(index).getColor"  class="form-control"/>
                                 <input  type="hidden" name="color" id="colorRGBValue@index"  value="@encomendaprop.getEstruturasList().get(index).getColor"  class="form-control"/>
                               </div>
-                                <script type="text/javascript">
-                                    $(document).ready(function() {
-                                        $('#colorPicker@index').empty().addColorPicker({
-                                            clickCallback: function(c) {
-                                              $('#color@index').css('background-color',c);
-                                              $('#colorRGB@index').val(c);
-                                              $('#colorRGBValue@index').val(c);
-                                            }
-                                          });
-                                    });
-                                </script>
+                                
                                    <button id="addButton" type="button" onClick="deleteEstrutura(@index);" class="btn btn-secondary">remover</button>
                               </div>
 
@@ -124,6 +114,98 @@
                           </div>
                       </div>
                        <button id="addButton" type="button" onClick="addEstrutura();" class="btn btn-secondary">Add Nova estrutura</button>
+                  </div><!-- /.box-body -->
+
+                  <div id ="" class="box-body">
+                      <div class="form-group">
+                          <label >Preços  de Flor</label>
+                            @if(encomendaprop!=null&&encomendaprop.getFlowerPriceList.size()>0){
+                              @for(florAndPrice <- encomendaprop.getFlowerPriceList){
+                                <select name="florPriceLabel" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                                    <option value="@florAndPrice.getName">@florAndPrice.getName</option>
+                                </select>
+                                 <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input type="text" id="price@florAndPrice.getName"  name="priceFlor" class="price form-control">
+                                  </div> 
+                              }
+                            }else{
+                              @for(flor<- Utils.ProductType.getList){
+                                <select name="florPriceLabel" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                                    <option value="@flor">@flor</option>
+                                </select>
+                                 <div class="input-group">
+                                    <span class="input-group-addon">R$</span>
+                                    <input type="text" id="price"  name="priceFlor"  value="0,00"  class="price form-control">
+                                  </div>
+
+                              }
+                            }
+
+                          </div>
+                      </div>
+                      <div id ="" class="box-body">
+                        <div class="form-group">
+                            <label >Preços de recheio</label>
+                              @if(encomendaprop!=null&&encomendaprop.getRecheiosPriceList.size()>0){
+                                @for(recheioAndPrice <- encomendaprop.getRecheiosPriceList){
+                                  <select name="recheioPriceLabel" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                                      <option value="@recheioAndPrice.getName">@recheioAndPrice.getName</option>
+                                  </select>
+                                   <div class="input-group">
+                                      <span class="input-group-addon">R$</span>
+                                      <input type="text" id="price@recheioAndPrice.getName"  name="priceRecheio"  class="price form-control">
+                                    </div> 
+                                }
+                              }else{
+                                @for(recheio<- Utils.ProductRecheioType.getList){
+                                  <select name="recheioPriceLabel" data-placeholder="Chose the tages" style="width: 350px; display: none;"  class="estrutura chosen-select-width" tabindex="-1">
+                                        <option value="@recheio">@recheio</option>
+                                    </select>
+                                    <div class="input-group">
+                                      <span class="input-group-addon">R$</span>
+                                      <input type="text" id="price"  name="priceRecheio"  value="0,00"  class="price form-control">
+                                    </div>
+                                }
+                              }
+                            </div>
+                        </div>
+
+
+                  <div id ="" class="box-body">
+                  
+                      <label >Desconto</label>
+                      <div class="checkbox">
+                        <label>
+                          <input type="checkbox" name="hasDiscount" @if(encomendaprop.isHasDiscount){checked=""}  > Permitir desconto
+                        </label>
+                      </div>
+
+                      <div class="form-group">
+                          <label >Tipo de desconto:</label>
+                          <select id="discountType" name="discountType"  class="form-control">
+                              @for(tag<- Utils.DiscountType.getList()){
+                              <option @if(encomendaprop.getDiscount!=null&&tag.equals(encomendaprop.getDiscount.getType)) {selected=""} value="@tag" >@tag</option>
+                              }
+                          </select>
+                      </div>
+
+                    <div class="form-group">
+                        <label> Quantidade </label>
+                        <div class="input-group">
+                            <input type="text" id="quantity" name="quantity" @if(encomendaprop.getDiscount!=null){ value="@encomendaprop.getDiscount.getQuantity"} id="quantity" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label> Valor </label>
+                        <div class="input-group">
+                            <span id="valueSign" class="input-group-addon">R$</span>
+                            <input type="text" id="valorDiscount" name="valueOF" id="valueOF" class="form-control price">
+                        </div>
+                    </div>
+
+                    
                   </div><!-- /.box-body -->
 
                   <div class="box-footer">
@@ -156,6 +238,7 @@
      $(document).ready(function() {
              $("li" ).removeClass("active")
              $(".treeview" ).addClass("active");
+            var spinner = $( "#quantity" ).spinner();
 
             $("#li-encomenda" ).addClass("active");
             $('#colorPicker').empty().addColorPicker({
@@ -167,10 +250,58 @@
                   
                 }
               });
+            $('.price').maskMoney({prefix:' ', thousands:'.', decimal:',', affixesStay: true});
+            @if(encomendaprop!=null&&encomendaprop.getFlowerPriceList.size()>0){
+              @for(florAndPrice <- encomendaprop.getFlowerPriceList){
+               $('#price@florAndPrice.getName').maskMoney({prefix:' ', thousands:'.', decimal:',', affixesStay: true});
+                $('#price@florAndPrice.getName').maskMoney('mask',@florAndPrice.getPrice);
+              }
+            }
+            @if(encomendaprop!=null&&encomendaprop.getRecheiosPriceList.size()>0){
+              @for(recheioAndPrice <- encomendaprop.getRecheiosPriceList){
+                $('#price@recheioAndPrice.getName').maskMoney({prefix:' ', thousands:'.', decimal:',', affixesStay: true});
+                $('#price@recheioAndPrice.getName').maskMoney('mask',@recheioAndPrice.getPrice);
+              } 
+            }
+            @if(encomendaprop.getDiscount!=null){ 
+              $('#valorDiscount').maskMoney({prefix:' ', thousands:'.', decimal:',', affixesStay: true});
+              $('#valorDiscount').maskMoney('mask',@encomendaprop.getDiscount.getValue);
+            }
+            @for(index <- 0 until encomendaprop.getEstruturasList().size){
+
+            $('#colorPicker@index').empty().addColorPicker({
+                clickCallback: function(c) {
+                  $('#color@index').css('background-color',c);
+                  $('#colorRGB@index').val(c);
+                  $('#colorRGBValue@index').val(c);
+                }
+              });
+
+            }
+            $('#discountType').change(function() {
+                var type = $(this).val();
+                var percent = '@Utils.DiscountType.percent.name()';
+
+                if(type==percent){
+                    $('#valueSign').html('%');
+                }else{
+                    $('#valueSign').html('R$');
+                }
+
+            });
+            var type = $("#discountType").val();
+            var percent = '@Utils.DiscountType.percent.name()';
+
+            if(type==percent){
+                $('#valueSign').html('%');
+            }else{
+                $('#valueSign').html('R$');
+            }
+            // $('#price').maskMoney('mask','10.22');
         });
         var estruturaJS = {};
         @if(encomendaprop!=null&&encomendaprop.getEstruturas!=null){
-            var count = @encomendaprop.getEstruturas.size()
+            var count = @encomendaprop.getEstruturas.size() ;
         }else{
             var count = 0;
         }
