@@ -19,7 +19,7 @@
     <!-- Small boxes (Stat box) -->
     <div class="row">
         <!-- left column -->
-        <div class="col-md-6">
+        <div class="col-md-12">
             <!-- general form elements -->
             <div class="box box-primary">
                 <div class="box-header">
@@ -43,18 +43,39 @@
                     @CSRF.formField
                     <label > Proucts</label> 
                     <div id ="productsContainer" class="box-body">
-
+                    
                     @for(inventorie<-order.getProducts){
+                        @if(inventorie.getProduct!=null){
                         <div class="form-group">
-                            <label > 
+                            <label >
                               @inventorie.getProduct.getTitle :
                                 <br/> R$@inventorie.getProduct.getPrice /
-                                @inventorie.getRecheio/ @inventorie.getType / @inventorie.getEstruturas.toString</label>
+                                @inventorie.getRecheio/ @inventorie.getType /</label>
+                            @for(estrutura<-inventorie.getEstruturas){
+                                @Html(estrutura.toString)
+                            }
                               <br/>
-                             <label >Quantity: @inventorie.getQuantity</label>
-                             <label >Total: @inventorie.getPriceWithQuantityFormatted</label>
+                             <label >Quantity: @inventorie.getQuantity</label><br/>
+                            <label >Total: @inventorie.getPriceWithQuantityFormatted</label><br/>
+                            <label >Encomenda: @inventorie.isEncomenda</label>
                              <br/>
                         </div>
+                        }else{
+                            <div class="form-group">
+                                <label >
+                                    Encomenda :
+                                    <br/> Total: @inventorie.getPriceWithQuantityFormatted /
+                                    @inventorie.getRecheio/ @inventorie.getType / </label>
+                                @for(estrutura<-inventorie.getEstruturas){
+                                   @Html(estrutura.toString)
+                                }
+
+                                <br/>
+                                <label >Quantity: @inventorie.getQuantity</label>
+                                <label >Encomenda: @inventorie.isEncomenda</label>
+                                <br/>
+                            </div>
+                        }
                     }
                     </div>
 

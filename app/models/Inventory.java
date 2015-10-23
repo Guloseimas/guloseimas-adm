@@ -48,6 +48,7 @@ public class Inventory {
     private boolean orderOutOfStock;
 
     private boolean sellInOutOfStock;
+    private boolean encomenda;
 
     private double priceWithQuantity;
 
@@ -88,6 +89,14 @@ public class Inventory {
 
     public void setTemDoce(boolean temDoce) {
         this.temDoce = temDoce;
+    }
+
+    public boolean isEncomenda() {
+        return encomenda;
+    }
+
+    public void setEncomenda(boolean encomenda) {
+        this.encomenda = encomenda;
     }
 
     public double getPriceWithQuantity() {

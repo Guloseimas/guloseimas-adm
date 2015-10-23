@@ -373,28 +373,38 @@ public class Order {
     @Document
     public class InventoryOrder {
 
-        @Id
+        @Field("_id")
         private String sku;
 
-        private Product product;
-
+        @Field("quantity")
         private int quantity;
-
+        @Field("product")
+        private Product product;
+        @Field("type")
         private String type;
 
-
+        @Field("recheio")
         private String recheio;
 
+        @Field("estruturas")
         private List<Estrutura> estruturas;
 
         // private String genderSlug;
 
+        @Field("orderOutOfStock")
         private boolean orderOutOfStock;
+        @Field("encomenda")
+        private boolean encomenda;
+        @Field("temDoce")
+        private boolean temDoce;
 
+        @Field("sellInOutOfStock")
         private boolean sellInOutOfStock;
 
+        @Field("priceWithQuantity")
         private double priceWithQuantity;
 
+        @Field("priceWithQuantityFormatted")
         private String priceWithQuantityFormatted;
 
 
@@ -402,9 +412,10 @@ public class Order {
         return "sku "+this.sku+" quantity "+this.quantity+" recheio "+this.recheio
                 +" estrutura "+this.estruturas.toString()+" type "+this.type
                 +" priceWithQuantityFormatted "+this.priceWithQuantityFormatted
-                +" Price "+this.product.getPriceFormatted()
-                +" title "+this.product.getTitle()+" description "
-                +this.product.getDescription();
+                +" Price "+((this.product!=null)?this.product.getPriceFormatted():this.getPriceWithQuantityFormatted())
+                +" title "+((this.product!=null)?this.product.getTitle():"Encomenda")+" description "
+                +((this.product!=null)?this.product.getDescription():"Encomdan")
+            ;
         }
 
         public double getPriceWithQuantity() {
@@ -436,6 +447,8 @@ public class Order {
             this.recheio = inventory.getRecheio();
             this.orderOutOfStock = inventory.isOrderOutOfStock();
             this.sellInOutOfStock = inventory.isSellInOutOfStock();
+            this.encomenda = inventory.isEncomenda();
+            this.temDoce = inventory.isTemDoce();
         }
 
         public boolean isSellInOutOfStock() {
@@ -487,7 +500,21 @@ public class Order {
             this.orderOutOfStock = orderOutOfStock;
         }
 
-       
+        public boolean isEncomenda() {
+            return encomenda;
+        }
+
+        public void setEncomenda(boolean encomenda) {
+            this.encomenda = encomenda;
+        }
+        public boolean isTemDoce() {
+            return temDoce;
+        }
+
+        public void setTemDoce(boolean temDoce) {
+            this.temDoce = temDoce;
+        }
+
 
         public int getQuantity() {
             return quantity;

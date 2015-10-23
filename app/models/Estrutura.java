@@ -60,4 +60,8 @@ import java.util.List;
                     ((Estrutura)this).getColor().equals(((Estrutura)obj).getColor()));
         }
 
+        public String toString(){
+            return "<p>"+this.estrutura + " <span style=\"background-color:"+this.color+"\"> cor </span> </p>" ;
+        }
+
     }
